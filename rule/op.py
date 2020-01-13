@@ -29,14 +29,8 @@ class Op(object):
     name = ''
 
     def __call__(self, context, *args):
-        # NOTE: always try the first arg as var
-        var = args[0]
-        if isinstance(var, six.string_types):
-            try:
-                var = context.get(var, var)
-            except Exception:
-                pass
-        return self.calc(context, var, *args[1:])
+        args = [context.get(a,a) for a in args]
+        return self.calc(context, *args)
 
     def calc(self, context, *args):
         name = self.name.lower()
@@ -75,6 +69,7 @@ simple_ops = [
     ('lt', '<'),
     ('le', '<='),
     ('ne', '!='),
+    ('eq', '=='),
     ('ge', '>='),
     ('gt', '>'),
 
